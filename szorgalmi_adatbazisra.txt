@@ -1,0 +1,3 @@
+https://github.com/EszterGall/adatbazisok.git
+
+szorgalmi_sql.txt
