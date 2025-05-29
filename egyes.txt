@@ -1,0 +1,84 @@
+// Form1.cs
+using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
+
+namespace SmileyFaktorialisApp
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            List<Sor> lista = new List<Sor>();
+            for (int i = 1; i <= 10; i++)
+            {
+                lista.Add(new Sor { SorSzam = i, Faktorialis = Fakt(i) });
+            }
+            dataGridView1.DataSource = lista;
+        }
+
+        private long Fakt(int n)
+        {
+            long eredmeny = 1;
+            for (int i = 2; i <= n; i++) eredmeny *= i;
+            return eredmeny;
+        }
+
+        private void btnGeneralSmiley_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                SmileyButton btn = new SmileyButton();
+                btn.Location = new System.Drawing.Point(10, 250 + i * 35);
+                Controls.Add(btn);
+            }
+        }
+    }
+
+    public class Sor
+    {
+        public int SorSzam { get; set; }
+        public long Faktorialis { get; set; }
+    }
+}
+
+// SmileyButton.cs
+using System;
+using System.Windows.Forms;
+using System.Drawing;
+
+namespace SmileyFaktorialisApp
+{
+    public class SmileyButton : Label
+    {
+        private int allapot = 0;
+        private static readonly string[] smileyCodes =
+        {
+            "\U0001F600", // 😐
+            "\U0001F641", // 😁
+            "\U0001F62E", // 😢
+            "\U0001F621"  // 😠
+        };
+
+        public SmileyButton()
+        {
+            this.AutoSize = true;
+            this.BackColor = Color.LightGray;
+            this.Font = new Font("Segoe UI Emoji", 16);
+            this.Text = char.ConvertFromUtf32(0x1F600); // 😐
+            this.MouseClick += SmileyButton_MouseClick;
+        }
+
+        private void SmileyButton_MouseClick(object sender, MouseEventArgs e)
+        {
+            allapot = (allapot + 1) % 4;
+            int codePoint = Convert.ToInt32(smileyCodes[allapot].TrimStart('\u'), 16);
+            this.Text = char.ConvertFromUtf32(codePoint);
+        }
+    }
+}
